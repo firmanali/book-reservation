@@ -2,19 +2,19 @@ package main
 
 import (
 	"fmt"
+	config2 "github.com/firmanali/book-reservation/internal/config"
+	handlers2 "github.com/firmanali/book-reservation/internal/handlers"
+	render2 "github.com/firmanali/book-reservation/internal/render"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/firmanali/book-reservation/pkg/config"
-	"github.com/firmanali/book-reservation/pkg/handlers"
-	"github.com/firmanali/book-reservation/pkg/render"
 )
 
 const portNumber = ":8888"
 
-var app config.AppConfig
+var app config2.AppConfig
 var session *scs.SessionManager
 
 func main() {
@@ -29,17 +29,17 @@ func main() {
 
 	app.Session = session
 
-	tc, err := render.CreateTemplateCache()
+	tc, err := render2.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache", err)
 	}
 
 	app.TemplateCache = tc
 	app.UseCache = false
-	repo := handlers.NewRepo(&app)
-	handlers.NewHandlers(repo)
+	repo := handlers2.NewRepo(&app)
+	handlers2.NewHandlers(repo)
 
-	render.NewTemplates(&app)
+	render2.NewTemplates(&app)
 
 	fmt.Println("Starting on port", portNumber)
 
