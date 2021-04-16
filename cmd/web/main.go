@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
-	config2 "github.com/firmanali/book-reservation/internal/config"
-	handlers2 "github.com/firmanali/book-reservation/internal/handlers"
-	render2 "github.com/firmanali/book-reservation/internal/render"
+	"github.com/firmanali/book-reservation/internal/config"
+	"github.com/firmanali/book-reservation/internal/handlers"
+	"github.com/firmanali/book-reservation/internal/models"
+	"github.com/firmanali/book-reservation/internal/render"
 	"log"
 	"net/http"
 	"time"
@@ -14,10 +16,12 @@ import (
 
 const portNumber = ":8888"
 
-var app config2.AppConfig
+var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
+	//What to put in the session
+	gob.Register(models.Reservation{})
 
 	app.InProduction = false
 
@@ -29,17 +33,17 @@ func main() {
 
 	app.Session = session
 
-	tc, err := render2.CreateTemplateCache()
+	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache", err)
 	}
 
 	app.TemplateCache = tc
 	app.UseCache = false
-	repo := handlers2.NewRepo(&app)
-	handlers2.NewHandlers(repo)
+	repo := handlers.NewRepo(&app)
+	handlers.NewHandlers(repo)
 
-	render2.NewTemplates(&app)
+	render.NewTemplates(&app)
 
 	fmt.Println("Starting on port", portNumber)
 
