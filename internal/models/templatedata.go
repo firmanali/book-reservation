@@ -1,5 +1,7 @@
 package models
 
+import "github.com/firmanali/book-reservation/internal/forms"
+
 // Holds data sent from handler to render
 type TemplateData struct {
 	StringMap map[string]string
@@ -10,4 +12,5 @@ type TemplateData struct {
 	Flash     string
 	Warning   string
 	Error     string
+	Form *forms.Form
 }
