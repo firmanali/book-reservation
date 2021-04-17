@@ -1,0 +1,22 @@
+mode: set
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:21.47,25.2 1 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:28.33,30.2 1 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:32.67,36.2 3 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:38.68,48.2 5 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:50.74,58.2 4 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:60.78,62.16 2 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:66.2,77.19 6 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:88.2,89.66 2 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:62.16,65.3 2 0
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:77.19,86.3 4 0
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:93.71,95.2 1 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:97.69,99.2 1 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:101.75,103.2 1 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:105.79,109.2 3 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:116.79,122.16 3 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:126.2,127.14 2 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:122.16,124.3 1 0
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:130.70,132.2 1 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:134.82,136.9 2 1
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:143.2,149.4 4 0
+github.com/firmanali/book-reservation/internal/handlers/handlers.go:136.9,141.3 4 1
