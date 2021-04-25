@@ -24,6 +24,14 @@ type Repository struct {
 	DB repository.DatabaseRepo
 }
 
+type jsonResponse struct {
+	OK 		bool 	`json:"ok"`
+	Message string 	`json:"message"`
+	RoomId string 	`json:"room_id"`
+	StartDate string `json:"start_date"`
+	EndDate	string	`json:"end_date"`
+}
+
 // NewRepo create new repository
 func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
@@ -185,16 +193,36 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-type jsonResponse struct {
-	OK 		bool 	`json:"ok"`
-	Message string 	`json:"message"`
-}
-
 func (m *Repository) AvailabilityJson(w http.ResponseWriter, r *http.Request) {
-	resp := jsonResponse{
-		OK: true,
-		Message: "available",
+
+	sd := r.Form.Get("start")
+	ed := r.Form.Get("end")
+	layout := "02-01-2006"
+	startDate, err := time.Parse(layout, sd)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
 	}
+	endDate, err := time.Parse(layout, ed)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	roomId, err := strconv.Atoi(r.Form.Get("room_id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	isAvailable, err := m.DB.SearchAvailabilityByDatesByRoomId(startDate, endDate, roomId)
+	resp := jsonResponse{
+		OK: isAvailable,
+		Message: "",
+		RoomId: strconv.Itoa(roomId),
+		StartDate: sd,
+		EndDate: ed,
+	}
+
 	out, err := json.MarshalIndent(resp, "","    ")
 	if err != nil {
 		helpers.ServerError(w, err)
@@ -246,6 +274,40 @@ func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	res.RoomId = roomId
+	m.App.Session.Put(r.Context(), "reservation", res)
+	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
+}
+
+func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
+// 	get url params
+	roomId, err := strconv.Atoi(r.URL.Query().Get("room_id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	sd := r.URL.Query().Get("s")
+	ed := r.URL.Query().Get("e")
+	layout := "02-01-2006"
+	startDate, err := time.Parse(layout, sd)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	endDate, err := time.Parse(layout, ed)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	var res models.Reservation
+	res.RoomId = roomId
+	res.StartDate = startDate
+	res.EndDate = endDate
+	room, err := m.DB.GetRoomById(roomId)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	res.Room = room
 	m.App.Session.Put(r.Context(), "reservation", res)
 	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
 }
